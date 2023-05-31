@@ -2,6 +2,7 @@ package com.cloudera.apiHandler;
 
 import com.cloudera.message.cache.MessageCache;
 import com.cloudera.message.listener.MessageListener;
+import com.cloudera.service.RequestListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,5 +27,10 @@ public class LongPollingConfig {
     public MessageListener messageListener() {
         // Create and configure the MessageListener bean
         return new MessageListener();
+    }
+
+    @Bean
+    RequestListener requestListener(){
+        return new RequestListener();
     }
 }

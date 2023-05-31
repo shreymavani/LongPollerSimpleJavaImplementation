@@ -19,23 +19,30 @@ public class MessageProvider {
     private final MessageListener messageListener;
 
     private final MessageCache cache;
+    private final RequestListener requestListener;
 
     private final ExecutorService cacheReaderThreads;
 
-    public MessageProvider(MessageListener messageListener, MessageCache cache, ExecutorService cacheReaderThreads) {
+    public MessageProvider(MessageListener messageListener, MessageCache cache, RequestListener requestListener,ExecutorService cacheReaderThreads) {
         this.messageListener = messageListener;
+        this.requestListener = requestListener;
         this.cache = cache;
         this.cacheReaderThreads = cacheReaderThreads;
     }
 
-    public Optional<String> waitForNextMessage(String tenantId, long timeout, TimeUnit timeUnit) {
-        final MessageReceiver receiver = new MessageReceiver();
-        final CacheReader reader = newCacheReader(cache, receiver, tenantId,cacheReaderThreads).triggerCacheSearch();
-        final LatestMessageListener latestMessageListener = newLatestMessageListener(receiver, messageListener).subscribe();
-        try {
-            return receiver.takeMessage(timeout, timeUnit);
-        } finally {
-            latestMessageListener.unSubscribe();
-        }
+    public Optional<String>  waitForNextMessage(String tenantId, long timeout, TimeUnit timeUnit) {
+
+//        if(requestListener.findDetails(tenantId)!= null) {
+
+            final MessageReceiver receiver = new MessageReceiver();
+            final CacheReader reader = newCacheReader(cache, receiver, tenantId, cacheReaderThreads).triggerCacheSearch();
+            final LatestMessageListener latestMessageListener = newLatestMessageListener(receiver, messageListener).subscribe();
+            try {
+                return receiver.takeMessage(timeout, timeUnit);
+            } finally {
+                latestMessageListener.unSubscribe();
+            }
+//        }
+//        return Optional.empty();
     }
 }

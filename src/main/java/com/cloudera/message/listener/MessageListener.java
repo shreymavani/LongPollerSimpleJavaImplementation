@@ -15,4 +15,12 @@ public class MessageListener {
     public void unSubscribe(MessageReceiver receiver) {
         messageReceiverList.remove(receiver);
     }
+
+    public void sentToALLReceivers(String message)
+    {
+        for(MessageReceiver receiver:messageReceiverList)
+        {
+            receiver.receiveMessage(message);
+        }
+    }
 }

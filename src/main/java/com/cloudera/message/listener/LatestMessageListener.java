@@ -16,7 +16,6 @@ public class LatestMessageListener {
     public static LatestMessageListener newLatestMessageListener(MessageReceiver receiver, MessageListener messageListener) {
         return new LatestMessageListener(receiver, messageListener);
     }
-
     public LatestMessageListener subscribe() {
         messageListener.subscribe(receiver);
         return this;
